@@ -1,4 +1,3 @@
-import 'package:android_and_ios/column_learning.dart';
 import 'package:android_and_ios/list.dart';
 import 'package:flutter/material.dart';
 
@@ -61,6 +60,6 @@ class _MyHomePageState extends State<MyHomePage> {
     /// Gridview
 
     /// Demonstartion of column
-    return ListLearning(); 
+    return ListLearning();
   }
 }
