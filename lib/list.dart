@@ -1,4 +1,5 @@
 import 'package:android_and_ios/new_screen.dart';
+import 'package:android_and_ios/use_dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -22,7 +23,7 @@ class _ListLearningState extends State<ListLearning> {
       context,
       CupertinoPageRoute(builder: (_) {
         /// this is returning the route/screen/page we are trying to navigate to
-        return PostDetailsScreen();
+        return UsingDio();
       }),
     );
   }
