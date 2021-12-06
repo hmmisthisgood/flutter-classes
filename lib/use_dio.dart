@@ -1,5 +1,10 @@
+import 'package:android_and_ios/widgets/post_widget.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+
+import 'model/posts.dart';
+
+//
 
 class UsingDio extends StatefulWidget {
   const UsingDio({Key? key}) : super(key: key);
@@ -10,13 +15,14 @@ class UsingDio extends StatefulWidget {
 
 class _UsingDioState extends State<UsingDio> {
   String dataToBeDisplayed = "Fetching data from server";
+  List<Posts> posts = [];
 
   postRequestToTheServer() {
     Dio().post("https://jsonplaceholder.typicode.com/posts",
         data: {"email": "test@test.com", "password": "password"});
   }
 
-  fetchPostsDataFromServer() async {
+  void fetchPostsDataFromServer() async {
     print("starting data fetch from the server:");
     final url = "https://jsonplaceholder.typicode.com/posts/";
 
@@ -27,11 +33,22 @@ class _UsingDioState extends State<UsingDio> {
       print(result.statusCode);
       print(result);
 
+      /// In dio we do not have to do json.decode() the response data.
+
+      /// converting the list of json data that we received into the list of posts
+      /// with lists's map function
+
+      posts = (result.data as List).map<Posts>((item) {
+        Posts newPost = Posts.fromJson(item);
+        return newPost;
+      }).toList();
+
       setState(() {
         dataToBeDisplayed = result.data.toString();
       });
     } catch (e) {
       print(e);
+      setState(() {});
     }
 
     ///
@@ -51,7 +68,19 @@ class _UsingDioState extends State<UsingDio> {
     print("\n This is the init state functionn being called \n");
 
     fetchPostsDataFromServer();
+
+    if (mounted) {}
   }
+
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  // }
+
+  // @override
+  // void didUpdateWidget(covariant UsingDio oldWidget) {
+  //   super.didUpdateWidget(oldWidget);
+  // }
 
   @override
   void dispose() {
@@ -66,7 +95,20 @@ class _UsingDioState extends State<UsingDio> {
       appBar: AppBar(
         title: Text("Use dio"),
       ),
-      body: Center(child: Text(dataToBeDisplayed)),
+      body: posts.isEmpty
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : ListView.builder(
+              itemCount: posts.length,
+              itemBuilder: (context, index) {
+                final _currentPost = posts[index];
+
+                print(index.toString());
+
+                return PostWidget(post: _currentPost);
+              },
+            ),
     );
   }
 }
