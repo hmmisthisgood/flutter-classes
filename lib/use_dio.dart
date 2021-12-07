@@ -17,11 +17,6 @@ class _UsingDioState extends State<UsingDio> {
   String dataToBeDisplayed = "Fetching data from server";
   List<Posts> posts = [];
 
-  postRequestToTheServer() {
-    Dio().post("https://jsonplaceholder.typicode.com/posts",
-        data: {"email": "test@test.com", "password": "password"});
-  }
-
   void fetchPostsDataFromServer() async {
     print("starting data fetch from the server:");
     final url = "https://jsonplaceholder.typicode.com/posts/";
@@ -85,11 +80,12 @@ class _UsingDioState extends State<UsingDio> {
   @override
   void dispose() {
     super.dispose();
+    print("this is the dispose function being called");
   }
 
   @override
   Widget build(BuildContext context) {
-    print("\n This is the build state functionn being called \n");
+    print("\n This is the build  functionn being called \n");
 
     return Scaffold(
       appBar: AppBar(
