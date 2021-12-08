@@ -1,5 +1,6 @@
 import 'package:android_and_ios/list.dart';
 import 'package:android_and_ios/text_field_widgets.dart';
+import 'package:android_and_ios/widgets/tab_view_widget.dart';
 import 'package:flutter/material.dart';
 
 import 'page_view_widget.dart';
@@ -18,7 +19,9 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: PageViewWidget());
+        home: TabViewWidget()
+        //PageViewWidget(),
+        );
   }
 }
 
