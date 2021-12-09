@@ -5,16 +5,17 @@
 /// 4.When button is pressed user has to be navigated to a new screen which has title "Home"
 ///
 
+import 'package:android_and_ios/utils/shared_pref.dart';
 import 'package:flutter/material.dart';
 
-class TextFieldScreen extends StatefulWidget {
-  const TextFieldScreen({Key? key}) : super(key: key);
+class LoginnScreen extends StatefulWidget {
+  const LoginnScreen({Key? key}) : super(key: key);
 
   @override
-  _TextFieldScreenState createState() => _TextFieldScreenState();
+  _LoginnScreenState createState() => _LoginnScreenState();
 }
 
-class _TextFieldScreenState extends State<TextFieldScreen> {
+class _LoginnScreenState extends State<LoginnScreen> {
   TextEditingController emailController = TextEditingController();
 
   TextEditingController passwordController = TextEditingController();
@@ -80,7 +81,7 @@ class _TextFieldScreenState extends State<TextFieldScreen> {
               MaterialButton(
                 minWidth: 200,
                 color: Colors.green,
-                onPressed: () {
+                onPressed: () async {
                   var email = emailController.text;
                   var password = passwordController.text;
 
@@ -90,6 +91,8 @@ class _TextFieldScreenState extends State<TextFieldScreen> {
                   if (formKey.currentState != null) {
                     formKey.currentState!.validate();
                   }
+
+                  SharedPref.setUserHasLoggedIn(true);
                 },
                 child: Text(
                   "login",

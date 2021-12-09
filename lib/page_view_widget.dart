@@ -1,5 +1,13 @@
 import 'package:flutter/material.dart';
 
+
+
+/// create layout like TikToks 
+/// Stack, image, Column of clicakle items on the bottom right side 
+/// Colu,n of texts on the bottom left side
+
+
+
 class PageViewWidget extends StatefulWidget {
   const PageViewWidget({Key? key}) : super(key: key);
 
