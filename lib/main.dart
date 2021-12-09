@@ -1,5 +1,11 @@
+import 'package:android_and_ios/bottom_nav_bar_widget.dart';
 import 'package:android_and_ios/list.dart';
+import 'package:android_and_ios/text_field_widgets.dart';
+import 'package:android_and_ios/utils/shared_pref.dart';
+import 'package:android_and_ios/widgets/tab_view_widget.dart';
 import 'package:flutter/material.dart';
+
+import 'page_view_widget.dart';
 
 void main() {
   runApp(const MyApp());
@@ -7,16 +13,31 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: FutureBuilder<bool>(
+            future: SharedPref.getHasUserLoggedIn(),
+            builder: (context, loggedIn) {
+              if (loggedIn.connectionState == ConnectionState.done) {
+                if (loggedIn.data != null && loggedIn.data == true) {
+                  return ListLearning();
+                }
+
+                return LoginnScreen();
+              }
+              return LoginnScreen();
+            })
+
+        //  BottomNavBarWidget()
+        //  TabViewWidget()
+
+        //PageViewWidget(),
+        );
   }
 }
 

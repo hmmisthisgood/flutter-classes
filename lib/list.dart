@@ -1,3 +1,6 @@
+import 'package:android_and_ios/new_screen.dart';
+import 'package:android_and_ios/use_dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 ////////////////////////////////////////////////////////////////////
 ///
@@ -45,6 +48,15 @@ class _ListLearningState extends State<ListLearning> {
     setState(() {
       ourColor = Colors.green;
     });
+
+    /// to go to new page we have to use, push funtion.
+    Navigator.push(
+      context,
+      CupertinoPageRoute(builder: (_) {
+        /// this is returning the route/screen/page we are trying to navigate to
+        return UsingDio();
+      }),
+    );
   }
 
   @override
@@ -103,18 +115,36 @@ class _ListLearningState extends State<ListLearning> {
       "Beautiful Sunrise",
       "Good morning",
       "Pink sunset",
+      "Beautiful Photo",
+      "Good morning",
+      "Pink sunset",
+      "Beautiful Photo",
+      "Good morning",
+      "Pink sunset",
       "Beautiful Photo"
     ];
 
     return Scaffold(
-      body: ListView.builder(
+      body: GridView.builder(
         itemCount: posts.length,
+        scrollDirection: Axis.vertical,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+
+            /////// it is the ratio of width by height
+            childAspectRatio:0.7,
+
+
+            crossAxisSpacing: 10,
+            mainAxisSpacing: 10),
         itemBuilder: (context, index) {
           var post = posts[index];
 
           /// addding padding the to container from all sides
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
+          return InkWell(
+            onTap: () {
+              onButtonPress();
+            },
             child: Container(
               padding: EdgeInsets.all(10),
 
