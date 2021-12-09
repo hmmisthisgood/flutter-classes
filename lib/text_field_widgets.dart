@@ -5,7 +5,9 @@
 /// 4.When button is pressed user has to be navigated to a new screen which has title "Home"
 ///
 
+import 'package:android_and_ios/list.dart';
 import 'package:android_and_ios/utils/shared_pref.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class LoginnScreen extends StatefulWidget {
@@ -93,6 +95,9 @@ class _LoginnScreenState extends State<LoginnScreen> {
                   }
 
                   SharedPref.setUserHasLoggedIn(true);
+
+                  Navigator.push(context,
+                      CupertinoPageRoute(builder: (_) => ListLearning()));
                 },
                 child: Text(
                   "login",
