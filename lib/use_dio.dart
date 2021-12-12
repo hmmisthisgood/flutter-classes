@@ -1,9 +1,13 @@
+import 'package:android_and_ios/bloc/posts/post_state.dart';
+import 'package:android_and_ios/bloc/posts/posts_bloc.dart';
 import 'package:android_and_ios/widgets/post_widget.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 import 'model/posts.dart';
 
+// flutter_bloc needs to be imported
+import 'package:flutter_bloc/flutter_bloc.dart';
 //
 
 class UsingDio extends StatefulWidget {
@@ -16,10 +20,18 @@ class UsingDio extends StatefulWidget {
 class _UsingDioState extends State<UsingDio> {
   String dataToBeDisplayed = "Fetching data from server";
   List<Posts> posts = [];
+  List videos = [];
+  bool hasErrorOccurred = false;
+  String errorMessage = "";
+
+  bool isDateFetching = false;
 
   void fetchPostsDataFromServer() async {
     print("starting data fetch from the server:");
     final url = "https://jsonplaceholder.typicode.com/posts/";
+
+    isDateFetching = true;
+    setState(() {});
 
     try {
       final result = await Dio().get(url);
@@ -33,16 +45,25 @@ class _UsingDioState extends State<UsingDio> {
       /// converting the list of json data that we received into the list of posts
       /// with lists's map function
 
-      posts = (result.data as List).map<Posts>((item) {
+      var _postdata = result.data as List;
+
+      posts = _postdata.map<Posts>((item) {
+        /// converting json item to a Post
+
         Posts newPost = Posts.fromJson(item);
         return newPost;
       }).toList();
 
       setState(() {
+        isDateFetching = false;
         dataToBeDisplayed = result.data.toString();
       });
     } catch (e) {
       print(e);
+      isDateFetching = false;
+
+      hasErrorOccurred = true;
+      errorMessage = e.toString();
       setState(() {});
     }
 
@@ -63,19 +84,9 @@ class _UsingDioState extends State<UsingDio> {
     print("\n This is the init state functionn being called \n");
 
     fetchPostsDataFromServer();
-
-    if (mounted) {}
+////
+    context.read<FetchPostsBloc>().fetchPostsWithBloc();
   }
-
-  // @override
-  // void didChangeDependencies() {
-  //   super.didChangeDependencies();
-  // }
-
-  // @override
-  // void didUpdateWidget(covariant UsingDio oldWidget) {
-  //   super.didUpdateWidget(oldWidget);
-  // }
 
   @override
   void dispose() {
@@ -87,24 +98,62 @@ class _UsingDioState extends State<UsingDio> {
   Widget build(BuildContext context) {
     print("\n This is the build  functionn being called \n");
 
+    ///these two are same things
+    // if (isDateFetching == true) {
+    // } else {}
+
+    // isDateFetching == true ? print("this") : print("that");
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Use dio"),
-      ),
-      body: posts.isEmpty
-          ? Center(
-              child: CircularProgressIndicator(),
-            )
-          : ListView.builder(
-              itemCount: posts.length,
-              itemBuilder: (context, index) {
-                final _currentPost = posts[index];
+        appBar: AppBar(
+          title: Text("Use dio"),
+        ),
+        body: BlocBuilder<FetchPostsBloc, PostState>(
+          builder: (context, state) {
+            if (state is PostLoadingState) {
+              return CircularProgressIndicator();
+            }
 
-                print(index.toString());
+            if (state is PostError) {
+              return Text(state.errorMessage);
+            }
 
-                return PostWidget(post: _currentPost);
-              },
-            ),
-    );
+            if (state is PostsEmpty) {
+              return Text("you have no posts");
+            }
+            if (state is PostFetchedState) {
+              return ListView.builder(
+                itemCount: state.data.length,
+                itemBuilder: (context, index) {
+                  final _currentPost = state.data[index];
+
+                  print(index.toString());
+
+                  return PostWidget(post: _currentPost);
+                },
+              );
+            }
+
+            return Container();
+          },
+        )
+
+        //  isDateFetching == true
+        //     ? Center(child: CircularProgressIndicator())
+        //     : hasErrorOccurred == true
+        //         ? Text(errorMessage)
+        //         : posts.isEmpty
+        //             ? Center(child: Text("There are no posts for you"))
+        //             : ListView.builder(
+        //                 itemCount: posts.length,
+        //                 itemBuilder: (context, index) {
+        //                   final _currentPost = posts[index];
+
+        //                   print(index.toString());
+
+        //                   return PostWidget(post: _currentPost);
+        //                 },
+        //               ),
+        );
   }
 }

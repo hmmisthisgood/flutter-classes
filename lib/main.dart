@@ -20,6 +20,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(primarySwatch: Colors.blue),
+
       onGenerateRoute: ourRouteGenerator,
       initialRoute: "/splash_screen",
 
@@ -84,6 +85,8 @@ class _MyHomePageState extends State<MyHomePage> {
     /// Gridview
 
     /// Demonstartion of column
-    return ListLearning();
+    return ListLearning(
+      someData: "",
+    );
   }
 }

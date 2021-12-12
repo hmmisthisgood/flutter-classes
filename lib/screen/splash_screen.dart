@@ -1,6 +1,8 @@
 import 'package:android_and_ios/utils/shared_pref.dart';
 import 'package:flutter/material.dart';
 
+import '../list.dart';
+
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
 
@@ -27,12 +29,13 @@ class _SplashScreenState extends State<SplashScreen> {
       // 2. CupertinoPageRoute
       await Future.delayed(Duration(seconds: 2), () {
         //  navigation without named routes
-        // Navigator.push(
-        //     context, MaterialPageRoute(builder: (ctx) => ListLearning()));
+        // Navigator.push(context,
+        //     MaterialPageRoute(builder: (ctx) => ListLearning(someData: "90")));
+
         Navigator.pushNamed(context, "/listing_screen");
       });
     } else {
-      await Future.delayed(Duration(seconds: 5), () {
+      await Future.delayed(Duration(seconds: 2), () {
         Navigator.pushNamed(context, "/login_screen");
       });
     }

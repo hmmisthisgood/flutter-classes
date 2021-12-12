@@ -4,8 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ListLearning extends StatefulWidget {
-  const ListLearning({Key? key}) : super(key: key);
-
+  const ListLearning({Key? key, required this.someData}) : super(key: key);
+  final String someData;
   @override
   State<ListLearning> createState() => _ListLearningState();
 }
@@ -101,9 +101,7 @@ class _ListLearningState extends State<ListLearning> {
             crossAxisCount: 2,
 
             /////// it is the ratio of width by height
-            childAspectRatio:0.7,
-
-
+            childAspectRatio: 0.7,
             crossAxisSpacing: 10,
             mainAxisSpacing: 10),
         itemBuilder: (context, index) {

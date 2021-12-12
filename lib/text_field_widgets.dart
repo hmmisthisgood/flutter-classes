@@ -96,8 +96,12 @@ class _LoginnScreenState extends State<LoginnScreen> {
 
                   SharedPref.setUserHasLoggedIn(true);
 
-                  Navigator.push(context,
-                      CupertinoPageRoute(builder: (_) => ListLearning()));
+                  Navigator.push(
+                      context,
+                      CupertinoPageRoute(
+                          builder: (_) => ListLearning(
+                                someData: '',
+                              )));
                 },
                 child: Text(
                   "login",
