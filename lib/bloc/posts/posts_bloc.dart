@@ -5,13 +5,15 @@ import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class FetchPostsBloc extends Cubit<PostState> {
-  FetchPostsBloc() : super(PostInitialState());
+  FetchPostsBloc() : super(PostLoadingState());
 
   int postCount = 10;
 
+  refreshPOsts() {}
+
   fetchPostsWithBloc() async {
     emit(PostLoadingState());
-
+ 
     final url = "https://jsonplaceholder.typicode.com/posts/";
 
     try {
@@ -19,9 +21,11 @@ class FetchPostsBloc extends Cubit<PostState> {
 
       print("this is our data from server:");
       print(result.statusCode);
-      print(result);
 
       var _postdata = result.data as List;
+
+      /// we threw and errro manually to check the errro state
+      // throw "This is custom exception";
 
       var posts = _postdata.map<Posts>((item) {
         /// converting json item to a Post
@@ -30,6 +34,7 @@ class FetchPostsBloc extends Cubit<PostState> {
         return newPost;
       }).toList();
 
+      ///
       if (posts.isEmpty) {
         emit(PostsEmpty());
       } else {
@@ -37,7 +42,7 @@ class FetchPostsBloc extends Cubit<PostState> {
       }
     } catch (e) {
       print(e);
-      emit(PostError(errorMessage: e.toString()));
+      emit(PostError(message: e.toString()));
     }
   }
 }

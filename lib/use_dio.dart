@@ -1,3 +1,4 @@
+import 'package:android_and_ios/bloc/common_bloc_state.dart';
 import 'package:android_and_ios/bloc/posts/post_state.dart';
 import 'package:android_and_ios/bloc/posts/posts_bloc.dart';
 import 'package:android_and_ios/widgets/post_widget.dart';
@@ -5,7 +6,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 import 'model/posts.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
 // flutter_bloc needs to be imported
 import 'package:flutter_bloc/flutter_bloc.dart';
 //
@@ -19,8 +20,11 @@ class UsingDio extends StatefulWidget {
 
 class _UsingDioState extends State<UsingDio> {
   String dataToBeDisplayed = "Fetching data from server";
+
   List<Posts> posts = [];
+
   List videos = [];
+
   bool hasErrorOccurred = false;
   String errorMessage = "";
 
@@ -77,14 +81,12 @@ class _UsingDioState extends State<UsingDio> {
     ///
   }
 
+  FetchPostsBloc bloc1 = FetchPostsBloc();
+
   @override
   void initState() {
     super.initState();
 
-    print("\n This is the init state functionn being called \n");
-
-    fetchPostsDataFromServer();
-////
     context.read<FetchPostsBloc>().fetchPostsWithBloc();
   }
 
@@ -108,14 +110,19 @@ class _UsingDioState extends State<UsingDio> {
         appBar: AppBar(
           title: Text("Use dio"),
         ),
-        body: BlocBuilder<FetchPostsBloc, PostState>(
+        body: BlocConsumer<FetchPostsBloc, PostState>(
+          listener: (context, state) {
+            setState(() {});
+          },
           builder: (context, state) {
+            print(state);
+
             if (state is PostLoadingState) {
               return CircularProgressIndicator();
             }
 
             if (state is PostError) {
-              return Text(state.errorMessage);
+              return Text(state.message);
             }
 
             if (state is PostsEmpty) {

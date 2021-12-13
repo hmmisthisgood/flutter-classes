@@ -49,6 +49,8 @@ class _SplashScreenState extends State<SplashScreen> {
           Icons.ad_units,
           size: 40,
           color: Colors.purple,
+
+          
         ),
       ),
     );

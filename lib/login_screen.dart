@@ -5,10 +5,11 @@
 /// 4.When button is pressed user has to be navigated to a new screen which has title "Home"
 ///
 
-import 'package:android_and_ios/list.dart';
+import 'package:android_and_ios/bloc/login/login_cubit.dart';
 import 'package:android_and_ios/utils/shared_pref.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LoginnScreen extends StatefulWidget {
   const LoginnScreen({Key? key}) : super(key: key);
@@ -23,6 +24,9 @@ class _LoginnScreenState extends State<LoginnScreen> {
   TextEditingController passwordController = TextEditingController();
   GlobalKey<FormState> formKey = GlobalKey();
 
+  LoginCubit loginCubit = LoginCubit();
+
+  bool loginLoading = false;
   @override
   void dispose() {
     super.dispose();
@@ -80,32 +84,65 @@ class _LoginnScreenState extends State<LoginnScreen> {
                 },
                 decoration: InputDecoration(),
               ),
-              MaterialButton(
-                minWidth: 200,
-                color: Colors.green,
-                onPressed: () async {
-                  var email = emailController.text;
-                  var password = passwordController.text;
+              IgnorePointer(
+                ignoring: loginLoading,
+                child: BlocListener(
+                  bloc: loginCubit,
+                  listener: (context, state) {
+                    if (state is LoginLoading) {
+                      loginLoading = true;
+                      setState(() {});
+                    } else if (state is LoginErrorState) {
+                      loginLoading = false;
+                      setState(() {});
 
-                  print(email);
-                  print(password);
+                      /// show some message to user that login has failed
+                      ///
+                    } else if (state is LoginSuccessState) {
+                      loginLoading = false;
+                      setState(() {});
 
-                  if (formKey.currentState != null) {
-                    formKey.currentState!.validate();
-                  }
+                      /// show some success message to user that
+                      /// login has succedeed
 
-                  SharedPref.setUserHasLoggedIn(true);
+                      /// navigate to some other pages
 
-                  Navigator.push(
-                      context,
-                      CupertinoPageRoute(
-                          builder: (_) => ListLearning(
-                                someData: '',
-                              )));
-                },
-                child: Text(
-                  "login",
-                  style: TextStyle(color: Colors.white),
+                    }
+                  },
+                  child: MaterialButton(
+                    minWidth: 200,
+                    color: Colors.green,
+                    onPressed: () async {
+                      var email = emailController.text;
+                      var password = passwordController.text;
+
+                      print(email);
+                      print(password);
+
+                      if (formKey.currentState != null) {
+                        bool isValidated = formKey.currentState!.validate();
+
+                        if (isValidated) {
+                          loginCubit.loginWithEmailAndPassword(email, password);
+                        }
+                      }
+
+                      SharedPref.setUserHasLoggedIn(true);
+
+                      // Navigator.push(
+                      //     context,
+                      //     CupertinoPageRoute(
+                      //         builder: (_) => ListLearning(
+                      //               someData: '',
+                      //             )));
+                    },
+                    child: loginLoading
+                        ? CircularProgressIndicator()
+                        : Text(
+                            "login",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                  ),
                 ),
               ),
             ],
