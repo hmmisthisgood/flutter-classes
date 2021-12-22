@@ -1,7 +1,5 @@
 import 'package:android_and_ios/bloc/posts/post_state.dart';
-import 'package:android_and_ios/model/posts.dart';
 import 'package:dio/dio.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class FetchPostsBloc extends Cubit<PostState> {
@@ -11,9 +9,9 @@ class FetchPostsBloc extends Cubit<PostState> {
 
   refreshPOsts() {}
 
-  fetchPostsWithBloc() async {
+  fetchSomething() async {
     emit(PostLoadingState());
- 
+
     final url = "https://jsonplaceholder.typicode.com/posts/";
 
     try {
@@ -22,6 +20,8 @@ class FetchPostsBloc extends Cubit<PostState> {
       print("this is our data from server:");
       print(result.statusCode);
 
+      /// this is the actual response data from server
+      /// for example: in http package it is available as `result.body`
       var _postdata = result.data as List;
 
       /// we threw and errro manually to check the errro state
@@ -45,4 +45,10 @@ class FetchPostsBloc extends Cubit<PostState> {
       emit(PostError(message: e.toString()));
     }
   }
+}
+
+class FetchVideos extends Cubit {
+  FetchVideos() : super(PostInitialState());
+
+  getVideoesFromServer() {}
 }
